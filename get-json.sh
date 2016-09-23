@@ -5,8 +5,10 @@ apod(){
 	[ -f json/$1.json ] && return
 	echo $day
 	wget -q "https://api.nasa.gov/planetary/apod?api_key=$api_key&hd=true&date=$1" -O json/$1.json
+	[ `wc -l json/$1.json|awk '{print $1}'` -eq 0 ] && rm json/$1.json && echo $1 >> err.log
 	sleep 2
 }
+rm err.log
 firstday=19950922
 today=`date +%Y%m%d`
 firstday_s=`date -d "$firstday" +%s`
@@ -17,6 +19,3 @@ do
 	firstday_s=$((firstday_s+86400))
 	apod $day
 done
-
-wc -l json/* | grep '^\s*0' | awk '{print $2}' > err.log
-cat err.log | xargs rm
