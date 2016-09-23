@@ -2,6 +2,7 @@
 [ ! -d image ] && mkdir image
 for i in json/*.json
 do
+	echo $i
 	media_type=`jq '.media_type' $i`
 	if [ "$media_type" == '"image"' ]
 	then
